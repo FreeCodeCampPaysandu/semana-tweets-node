@@ -1,0 +1,12 @@
+{
+  "name": "semana-cerveza-tweets",
+  "version": "0.0.1",
+  "description": "servidor donde vamos a tomar los tweets de la semana",
+  "dependencies": {
+    "express": "^4.10.2",
+    "socket.io": "^1.4.5",
+    "twit": "^2.2.3",
+    "twitter-stream-channels": "^1.0.0",
+    "underscore": "^1.8.3"
+  }
+}

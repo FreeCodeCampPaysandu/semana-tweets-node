@@ -1,0 +1,22 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Tweets</title>
+    <style>
+     
+    </style>
+    <script   src="https://code.jquery.com/jquery-2.2.1.min.js"   integrity="sha256-gvQgAFzTH6trSrAWoH1iPo9Xc96QxSZ3feW6kem+O00="   crossorigin="anonymous"></script>
+  </head>
+  <body>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      var socket = io();
+      socket.on('tweet', function(tweet){
+        $('#tweets').append($('<li>').text(tweet.text));
+        console.log(tweet);
+      });
+    </script>
+    <h1>Semana Tweets</h1>
+    <ul id="tweets"></ul>
+  </body>
+</html>
