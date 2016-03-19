@@ -1,4 +1,5 @@
 var Twit = require('twit');
+var express = require('express');
 var app = require('express')();
 var _ = require('underscore');
 var http = require('http').Server(app);
@@ -11,6 +12,8 @@ var T = new Twit({
   access_token_secret:  'h0YECJT5SJau20fl3AOJg1HnqOcrerykX37XNzXQVNfz7',
   timeout_ms:           60*1000,  // optional HTTP request timeout to apply to all requests.
 });
+
+app.use(express.static(__dirname + '/public')); 
 
 app.get('/tweets', function(req, res){
   
@@ -47,4 +50,3 @@ stream.on('tweet', function (tweet) {
 http.listen(9000, function(){
   console.log('listening on *:9000');
 });
-

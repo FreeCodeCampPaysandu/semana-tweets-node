@@ -2,21 +2,44 @@
 <html>
   <head>
     <title>Tweets</title>
-    <style>
-     
-    </style>
-    <script   src="https://code.jquery.com/jquery-2.2.1.min.js"   integrity="sha256-gvQgAFzTH6trSrAWoH1iPo9Xc96QxSZ3feW6kem+O00="   crossorigin="anonymous"></script>
+    
+    <script src="js/vendor.js"></script>
+    
+    <link rel="stylesheet" type="text/css" href="css/vendor.css">
+    <link rel="stylesheet" type="text/css" href="css/client.css">
+
   </head>
   <body>
     <script src="/socket.io/socket.io.js"></script>
     <script>
       var socket = io();
+      ids = [];
       socket.on('tweet', function(tweet){
-        $('#tweets').append($('<li>').text(tweet.text));
-        console.log(tweet);
+        //si tiene media
+        var new_grid_element = $('#template').clone();
+        new_grid_element.removeAttr('id');
+        if ($.inArray(tweet.id, ids) == -1) {
+          ids.push(tweet.id);
+        
+          //si tiene media
+          if (tweet.entities != undefined && tweet.entities.media != undefined && tweet.entities.media.length > 0) {
+            new_grid_element.find('img').attr('src', tweet.entities.media[0].media_url); 
+            new_grid_element.addClass('grid-item--width2'); 
+            new_grid_element.removeClass('hide');
+            new_grid_element.attr('style', '');
+            $('.grid').append(new_grid_element); 
+            $('.grid').packery();
+            console.log(tweet);
+          }
+        }
       });
+
+     
     </script>
-    <h1>Semana Tweets</h1>
-    <ul id="tweets"></ul>
+    <div class="grid">
+      <div id="template" class="grid-item hide">
+        <img src="#" class="img img-responsive" />
+      </div>
+    </div>
   </body>
 </html>
