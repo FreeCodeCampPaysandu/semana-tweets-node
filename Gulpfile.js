@@ -27,7 +27,8 @@ gulp.task('compile-vendor-js', function() {
   gulp.src(['bower_components/jquery/dist/jquery.min.js',
   			'bower_components/bootstrap/dist/js/bootstrap.min.js',
   			'bower_components/masonry/dist/masonry.pkgd.min.js',
-        'bower_components/packery/dist/packery.pkgd.min.js'], {base: 'bower_components'})
+        'bower_components/packery/dist/packery.pkgd.min.js',
+        'bower_components/imagesloaded/imagesloaded.pkgd.min.js' ], {base: 'bower_components'})
       .pipe(concat("vendor.js"))
       .pipe(gulp.dest('public/js'));
 });

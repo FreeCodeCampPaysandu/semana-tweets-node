@@ -17,7 +17,7 @@ app.use(express.static(__dirname + '/public'));
 
 app.get('/tweets', function(req, res){
   
-  T.get('search/tweets', { q: '#SemanadelaCerveza', count: 100 }, function(err, data, response) {
+  T.get('search/tweets', { q: '#SemanadelaCerveza', count: 200 }, function(err, data, response) {
   	console.log(data);
 
   	res.setHeader('Content-Type', 'application/json');
@@ -32,7 +32,7 @@ app.get('/', function(req, res){
 io.on('connection', function(socket){
   console.log('a user connected');
 
-  T.get('search/tweets', { q: '#SemanadelaCerveza', count: 100 }, function(err, data, response) {
+  T.get('search/tweets', { q: '#SemanadelaCerveza', count: 500 }, function(err, data, response) {
   	//console.log(data);
 
   	_.each(data.statuses, function(tweet) {
