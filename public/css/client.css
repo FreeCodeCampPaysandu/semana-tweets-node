@@ -1,0 +1,10 @@
+.grid-item {
+  float: left;
+  width: 48px;
+  height: 48px;
+}
+
+.grid-item--width2{
+  width: 200px;
+  height: 200px;
+}
