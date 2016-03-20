@@ -1,4 +1,5 @@
 var Twit = require('twit');
+var express = require('express');
 var app = require('express')();
 var _ = require('underscore');
 var http = require('http').Server(app);
@@ -12,9 +13,11 @@ var T = new Twit({
   timeout_ms:           60*1000,  // optional HTTP request timeout to apply to all requests.
 });
 
+app.use(express.static(__dirname + '/public')); 
+
 app.get('/tweets', function(req, res){
   
-  T.get('search/tweets', { q: '#SemanadelaCerveza', count: 100 }, function(err, data, response) {
+  T.get('search/tweets', { q: '#SemanadelaCerveza', count: 200 }, function(err, data, response) {
   	console.log(data);
 
   	res.setHeader('Content-Type', 'application/json');
@@ -29,7 +32,7 @@ app.get('/', function(req, res){
 io.on('connection', function(socket){
   console.log('a user connected');
 
-  T.get('search/tweets', { q: '#SemanadelaCerveza', count: 100 }, function(err, data, response) {
+  T.get('search/tweets', { q: '#SemanadelaCerveza', count: 500 }, function(err, data, response) {
   	//console.log(data);
 
   	_.each(data.statuses, function(tweet) {
@@ -47,4 +50,3 @@ stream.on('tweet', function (tweet) {
 http.listen(9000, function(){
   console.log('listening on *:9000');
 });
-

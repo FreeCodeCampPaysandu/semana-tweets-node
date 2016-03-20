@@ -1,0 +1,27 @@
+{
+  "name": "semana tweets node",
+  "description": "servidor donde vamos a tomar los tweets de la semana",
+  "main": "",
+  "authors": [
+    "Nicolas Zuasti <nicozuasti@gmail.com>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/FreeCodeCampPaysandu/semana-tweets-node",
+  "moduleType": [
+    "amd"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.6",
+    "masonry": "^4.0.0",
+    "jquery": "^2.2.2",
+    "packery": "^2.0.0",
+    "imagesloaded": "^4.1.0"
+  }
+}
