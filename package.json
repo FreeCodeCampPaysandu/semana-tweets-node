@@ -26,6 +26,7 @@
     "gulp-concat": "^2.6.0",
     "gulp-concat-css": "^2.2.0",
     "gulp-flatten": "^0.2.0",
+    "gulp-nodemon": "^2.0.6",
     "gulp-sass": "^2.2.0"
   }
 }
