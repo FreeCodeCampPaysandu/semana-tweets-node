@@ -2,85 +2,14 @@
 <html>
   <head>
     <title>Tweets</title>
-    
-    <script src="js/vendor.js"></script>
-    
-    <link rel="stylesheet" type="text/css" href="css/vendor.css">
     <link rel="stylesheet" type="text/css" href="css/client.css">
-
   </head>
   <body>
+
+    <div id="freewall"></div>
+
     <script src="/socket.io/socket.io.js"></script>
-    <script>
-      var socket = io();
-      ids = [];
-      texts = [];
-      socket.on('tweet', function(tweet){
-        //si tiene media
-        var new_grid_element = $('<div class="grid-item hide"><img src="#" class="desaturate" /></div>');
-        
-        if ($.inArray(tweet.id, ids) == -1 && $.inArray(tweet.text, texts) == -1) {
-          ids.push(tweet.id);
-          texts.push(tweet.text);
-        
-          //si tiene media
-          if (tweet.entities != undefined && tweet.entities.media != undefined && tweet.entities.media.length > 0) {
-            new_grid_element.find('img').attr('src', tweet.entities.media[0].media_url); 
-            new_grid_element.removeClass('hide');
-            new_grid_element.attr('style', '');
-            
-          } else {
-            var image = tweet.user.profile_image_url;
-            image = image.replace("_normal", "_bigger");
-            new_grid_element.find('img').attr('src', image); 
-            new_grid_element.removeClass('hide');
-            //new_grid_element.attr('style', '');
-
-          
-          }
-          //alto y ancho de la imagen para acomodarla mejor
-          var height = new_grid_element.find('img')[0].naturalHeight;
-          var width = new_grid_element.find('img')[0].naturalWidth;
-
-          //si la imagen es mayor a 73px de alto
-          if (height > '146') {
-            new_grid_element.addClass('grid-item-h2');
-          }
-
-          if (height > '292') {
-            new_grid_element.addClass('grid-item-h4');
-          }
-
-          if (width > '146') {
-            new_grid_element.addClass('grid-item-w2');
-          }
-
-          if (width > '292') {
-            new_grid_element.addClass('grid-item-w4');
-          }
-
-          $('.grid').append(new_grid_element); 
-          
-          //console.log(tweet);
-        }
-      });
-
-
-      $('.grid').packery();
-      var $grid = $('.grid').packery({
-        itemSelector: '.grid-item',
-        //percentPosition: true
-      });
-      // layout Packery after each image loads
-      /*
-      $grid.imagesLoaded().progress( function() {
-        $grid.packery();
-      });
-      */  
-     
-    </script>
-    <div class="grid">
-      
-    </div>
+    <script src="js/vendor.js"></script>
+    <script src="/js/main.js"></script>
   </body>
 </html>

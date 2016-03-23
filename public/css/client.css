@@ -1,76 +1,42 @@
-* { box-sizing: border-box; }
+/*
+  Reset css
+*/
 
-/* ---- grid ---- */
+html, body, div, span, applet, object, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 1em;
+  vertical-align: baseline;
+}
+
+/* end reset */
 
 body {
-  background: #000;
-  overflow: hidden;
+  background-color: black;
 }
 
-.grid {
-  background: #000;
-  width: 100vw;
-  height: 100vh;
+#free-wall {
+  margin: auto;
 }
 
-/* clear fix */
-.grid:before {
-  content: '';
-  display: block;
-  clear: both;
-}
-
-.grid:after {
-  content: '';
-  display: block;
-  clear: both;
-}
-
-/* ---- .grid-item ---- */
-
-.grid-item {
-  width: 73px;
-  height: 73px;
-  overflow: hidden;
-}
-
-.grid-item:after {
-  content: '';
-  display: block;
-  clear: both;
-}
-
-.grid-item-w2 {
-  width: 146px;
-}
-
-.grid-item-w4 {
-  width: 292px;
-}
-
-.grid-item-h2 {
-  height: 146px;
-}
-
-.grid-item-h4 {
-  height: 292px;
-}
-
-.grid-item {
-  float: left;
-  vertical-align: middle;
-}
-
-.grid-item img {
-	max-height: 100%;  
-	max-width: 100%; 
-	width: auto;
-	height: auto;
-	margin: auto;
-	vertical-align: middle;
-}
-
-img.desaturate { 
-	-webkit-filter: grayscale(100%);
-	filter: grayscale(100%);
+.cell {
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  position: absolute;
+  background-color: #ECECEC;
+  -webkit-filter: grayscale(95%);
+  filter: grayscale(95%);
 }
