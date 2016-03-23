@@ -175,3 +175,23 @@ body {
   }
 }
 
+/*
+  Centrar modal tweet de forma vertical
+*/
+
+.vertical-alignment-helper {
+    display:table;
+    height: 100%;
+    width: 60%;
+    margin: 0 auto;
+}
+.vertical-align-center {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.modal-content {
+    width:inherit;
+    height:inherit;
+    margin: 0 auto;
+}
