@@ -2,7 +2,6 @@
 
 Este es el repositorio del proyecto semana tweets node. Este server tomara los ultimos 100 tweets de #SemanadelaCerveza y los servira en el punto /tweets.
 
-En el canal "tweet" estará emitiendo todos los tweets que se usaran el el sistema ember.
 ### Tecnologia
 
 * [node.js] - evented I/O for the backend
@@ -15,8 +14,8 @@ En el canal "tweet" estará emitiendo todos los tweets que se usaran el el siste
 ```sh
 $ git clone [git-repo-url] 
 $ cd semana-tweets-node
-$ npm istall
-$ node server.js
+$ npm istall && bower install
+$ gulp
 ```
 
 ### Todos
