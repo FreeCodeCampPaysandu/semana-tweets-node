@@ -22,7 +22,9 @@ gulp.task('compile-vendor-styles', function() {
 gulp.task('compile-vendor-js', function() {
   gulp.src([
     'bower_components/jquery/dist/jquery.min.js',
-    'public/js/freewall.js'
+    'public/js/freewall.js',
+    'bower_components/bootstrap/dist/js/bootstrap.min.js',
+    'bower_components/underscore/underscore-min.js'
   ], {base: 'bower_components'})
   .pipe(concat("vendor.js"))
   .pipe(gulp.dest('public/js'))

@@ -3,11 +3,19 @@
   <head>
     <title>Tweets</title>
     <link rel="stylesheet" type="text/css" href="css/client.css">
+    <link rel="stylesheet" type="text/css" href="css/vendor.css">
   </head>
   <body>
+    <div class="spinner">
+      <div class="loading">Loading&#8230;</div>
+    </div>
+    <div class="tweet-container" style="display:none">
+      <div id="freewall" ></div>
+    </div>
 
-    <div id="freewall"></div>
-
+    <div class="colorbox-container">
+    
+    </div>
     <script src="/socket.io/socket.io.js"></script>
     <script src="js/vendor.js"></script>
     <script src="/js/main.js"></script>
