@@ -1,4 +1,6 @@
 /* global $, Freewall, io */
+var timerHide = null;
+var timerShow = null;
 
 // Funcion que devuelve Verdadero aproximadamente una de cada X veces, X como parametro
 function unoDeCada (num) {
@@ -9,11 +11,16 @@ function showTweet(tweets, id) {
   var index = Math.floor((Math.random() * tweets.length) + 1);
   
 
-  //$.colorbox({html: $('#' + tweets[index]) });
-  $('#' + tweets[index]).modal('toggle');
+  if (id == null) {
+    $('#' + tweets[index]).modal('toggle');  
+  } else {
+    $('#' + id).modal('toggle');
+  }
+  clearTimeout(timerHide);
+  clearTimeout(timerShow);
 
-  _.delay(function() {$('.modal').modal('hide'); }, 10000);
-  _.delay(showTweet, 20000, tweets, null);
+  timerHide = _.delay(function() {$('.modal').modal('hide'); }, 10000);
+  timerShow = _.delay(showTweet, 20000, tweets, null);
 }
 
 function createCell (image) {
@@ -132,6 +139,8 @@ $(document).ready(function () {
       tweet_texts.push(tweet.text);
       tweet_ids.push(tweet.id);
       wall.prepend(element);
+      $('.modal').modal('hide');
+      showTweet(tweet_ids, tweet.id);
     }
     
   })
