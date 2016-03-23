@@ -112,6 +112,8 @@ $(document).ready(function () {
     $('#freewall').empty();
     $('.tweet-container').hide();
     $('.spinner').show();
+    $('.modal').modal('hide');
+    $('.colorbox-container').html('');
   });
 
   socket.on('tweet', function (tweet) {
