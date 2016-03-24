@@ -22,7 +22,7 @@ app.get('/', function (req, res) {
 
 app.get('/initial', function (req, res) {
 
-  var a = T.get('search/tweets', { q: '#51Semanadelacerveza', count: 200 }, function (err, data, response) {
+  var a = T.get('search/tweets', { q: '#51semanadelacerveza', count: 200 }, function (err, data, response) {
     return data.statuses;
   });
 
@@ -33,22 +33,30 @@ app.get('/initial', function (req, res) {
   var c = T.get('search/tweets', { q: '@Semana_Cerveza', count: 200 }, function (err, data, response) {
     return data.statuses;
   });
-  eventualAdd(a,b,c);
 
-  function eventualAdd(a, b, c) {
-    return Q.spread([a, b, c], function (a, b, c) {
+  var d = T.get('search/tweets', { q: '#semana_cerveza', count: 200 }, function (err, data, response) {
+    return data.statuses;
+  });
 
+
+  eventualAdd(a,b,c,d);
+
+  function eventualAdd(a,b,c,d) {
+    return Q.spread([a,b,c,d], function (a,b,c,d) {
+        var list = a.data.statuses;
         var list = a.data.statuses.concat(b.data.statuses);
         list = list.concat(c.data.statuses);
+        list = list.concat(d.data.statuses);
         res.json(list);
     })
   }
 })
 
+
 io.on('connection', function (socket) {
   console.log('a user connected');
 
-  var a = T.get('search/tweets', { q: '#51Semanadelacerveza', count: 200 }, function (err, data, response) {
+  var a = T.get('search/tweets', { q: '#51semanadelacerveza', count: 200 }, function (err, data, response) {
     return data.statuses;
   });
 
@@ -59,18 +67,30 @@ io.on('connection', function (socket) {
   var c = T.get('search/tweets', { q: '@Semana_Cerveza', count: 200 }, function (err, data, response) {
     return data.statuses;
   });
-  eventualAdd(a,b,c);
 
-  function eventualAdd(a, b, c) {
-    return Q.spread([a, b, c], function (a, b, c) {
+  var d = T.get('search/tweets', { q: '#semana_cerveza', count: 200 }, function (err, data, response) {
+    return data.statuses;
+  });
+
+
+  eventualAdd(a,b,c,d);
+
+  function eventualAdd(a,b,c,d) {
+    return Q.spread([a,b,c,d], function (a,b,c,d) {
+        var list = a.data.statuses;
         var list = a.data.statuses.concat(b.data.statuses);
         list = list.concat(c.data.statuses);
+        list = list.concat(d.data.statuses);
         io.emit('initialTweets', list);
     })
   }
+  T.get('search/tweets', { q: '#semana_cerveza', count: 200 }, function (err, data, response) {
+
+  });
+
 });
 
-var stream = T.stream('statuses/filter', { track: ['#SemanadelaCerveza', '#51Semanadelacerveza', '@Semana_Cerveza'] });
+var stream = T.stream('statuses/filter', { track: ['#SemanadelaCerveza', '#51Semanadelacerveza', '@Semana_Cerveza', '#semana_cerveza'] });
 
 stream.on('tweet', function (tweet) {
   io.emit('tweet', tweet);
