@@ -55,20 +55,31 @@ app.get('/initial', function (req, res) {
 
 io.on('connection', function (socket) {
   console.log('a user connected');
+  T.get('search/tweets', { q: 'from:@Semana_Cerveza since:2016-03-19', count: 200 }, function (err, data, response) {
 
-  var a = T.get('search/tweets', { q: '#51semanadelacerveza', count: 200 }, function (err, data, response) {
+    io.emit('initialTweets', data.statuses);
+    console.log('emited tweets');
+  });
+
+  /*
+//  var a = T.get('search/tweets', { q: '#51semanadelacerveza', count: 200 }, function (err, data, response) {
+  var a = T.get('search/tweets', { q: '@semana_cerveza', count: 200 }, function (err, data, response) {
+
     return data.statuses;
   });
 
-  var b = T.get('search/tweets', { q: '#SemanadelaCerveza', count: 200 }, function (err, data, response) {
+//  var b = T.get('search/tweets', { q: '#SemanadelaCerveza', count: 200 }, function (err, data, response) {
+  var b = T.get('search/tweets', { q: '@semana_cerveza', count: 200 }, function (err, data, response) {
     return data.statuses;
   });
 
-  var c = T.get('search/tweets', { q: '@Semana_Cerveza', count: 200 }, function (err, data, response) {
+//  var c = T.get('search/tweets', { q: '@Semana_Cerveza', count: 200 }, function (err, data, response) {
+ var c = T.get('search/tweets', { q: '@semana_cerveza', count: 200 }, function (err, data, response) {
     return data.statuses;
   });
 
-  var d = T.get('search/tweets', { q: '#semana_cerveza', count: 200 }, function (err, data, response) {
+//  var d = T.get('search/tweets', { q: '#semana_cerveza', count: 200 }, function (err, data, response) {
+  var d = T.get('search/tweets', { q: '@semana_cerveza', count: 200 }, function (err, data, response) {
     return data.statuses;
   });
 
@@ -82,15 +93,14 @@ io.on('connection', function (socket) {
         list = list.concat(c.data.statuses);
         list = list.concat(d.data.statuses);
         io.emit('initialTweets', list);
+        console.log('emited tweets');
     })
   }
-  T.get('search/tweets', { q: '#semana_cerveza', count: 200 }, function (err, data, response) {
-
-  });
-
+  */
 });
 
-var stream = T.stream('statuses/filter', { track: ['#SemanadelaCerveza', '#51Semanadelacerveza', '@Semana_Cerveza', '#semana_cerveza'] });
+//var stream = T.stream('statuses/filter', { track: ['#SemanadelaCerveza', '#51Semanadelacerveza', '@Semana_Cerveza', '#semana_cerveza'] });
+var stream = T.stream('statuses/filter', { track: ['from:@Semana_Cerveza'] });
 
 stream.on('tweet', function (tweet) {
   io.emit('tweet', tweet);

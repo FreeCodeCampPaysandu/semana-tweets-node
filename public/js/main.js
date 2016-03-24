@@ -1,6 +1,7 @@
 /* global $, Freewall, io */
 var timerHide = null;
 var timerShow = null;
+var timerRefresh = null;
 
 // Funcion que devuelve Verdadero aproximadamente una de cada X veces, X como parametro
 function unoDeCada (num) {
@@ -21,6 +22,15 @@ function showTweet(tweets, id) {
 
   timerHide = _.delay(function() {$('.modal').modal('hide'); }, 10000);
   timerShow = _.delay(showTweet, 20000, tweets, null);
+}
+
+function refresh(wall) {
+  clearTimeout(timerRefresh);
+  console.log('refreshing');
+  wall.fitZone($(window).width(), $(window).height());
+  $(window).trigger('resize');
+  
+  timerRefresh = _.delay(refresh, 30000, wall);
 }
 
 function createCell (image) {
@@ -60,7 +70,12 @@ $(document).ready(function () {
 
   $('#freewall').empty();
 
-  var socket = io();
+  var socket = io({
+    'reconnect': true,
+    'reconnection delay': 500,
+    'max reconnection attempts': 1000
+  });
+
   var wall = new Freewall('#freewall');
 
   wall.reset({
@@ -88,11 +103,13 @@ $(document).ready(function () {
     }
   });
 
-  _.delay(showTweet, 5000, tweet_ids, null);
+  timerShow = _.delay(showTweet, 5000, tweet_ids, null);
+  timerRefresh = _.delay(refresh, 10000, wall);
 
 
   wall.fitZone($(window).width(), $(window).height());
   $(window).trigger('resize');
+
 
   
   socket.on('initialTweets', function (tweets) {
@@ -116,11 +133,42 @@ $(document).ready(function () {
   });
   
   socket.on('disconnect', function () {
+    /*
     $('#freewall').empty();
     $('.tweet-container').hide();
     $('.spinner').show();
     $('.modal').modal('hide');
     $('.colorbox-container').html('');
+    tweet_ids = [];
+    tweets_tweet_texts = [];
+
+    wall = new Freewall('#freewall');
+
+    wall.reset({
+        selector: '.cell',
+        animate: true,
+        gutterX: cellGutter,
+        gutterY: cellGutter,
+        cellW: cellSize,
+        cellH: cellSize,
+        onResize: function () {
+          wall.refresh($(window).width(), $(window).height())
+        },
+        onComplete: function() {
+          wall.reset({
+            animate: false
+          });
+          $('.spinner').fadeOut('400',
+            function() {
+              $('.tweet-container').show();
+          });
+
+        },
+        onBlockFinish: function() {
+
+        }
+    });
+    */
   });
 
   socket.on('tweet', function (tweet) {
@@ -139,6 +187,7 @@ $(document).ready(function () {
       tweet_texts.push(tweet.text);
       tweet_ids.push(tweet.id);
       wall.prepend(element);
+      wall.refresh();
       $('.modal').modal('hide');
       showTweet(tweet_ids, tweet.id);
     }
