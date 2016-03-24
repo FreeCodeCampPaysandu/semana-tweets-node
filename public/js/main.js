@@ -29,7 +29,7 @@ function refresh(wall) {
   console.log('refreshing');
   wall.fitZone($(window).width(), $(window).height());
   $(window).trigger('resize');
-  
+
   timerRefresh = _.delay(refresh, 30000, wall);
 }
 
@@ -46,7 +46,7 @@ function createCell (image) {
 }
 
 function createColorboxDiv (id, user, text, hashTags, image) {
-  var colorboxHtml = '<div class="modal fade" id="{id}"><div class="vertical-alignment-helper"><div class="modal-dialog modal-lg vertical-align-center"><div class="modal-content"><div class="modal-body"><div class="row"><div class="col-xs-6"><img src="{url}" class="img img-responsive"></div><div class="col-xs-6"><h1>{user}</h1><p>{text}</p></div></div></div></div></div></div></div>';
+  var colorboxHtml = '<div class="modal fade" id="{id}"><div class="vertical-alignment-helper"><div class="modal-dialog modal-lg vertical-align-center"><div class="modal-content"><div class="modal-body"><div class="row"><div class="col-xs-6"><img src="{url}" class="img img-responsive"></div><div class="col-xs-6"><h1>{user}</h1><h3>{text}</h3></div></div></div></div></div></div></div>';
   
   colorboxHtml = colorboxHtml.replace(/\{url\}/g, image);
   colorboxHtml = colorboxHtml.replace(/\{text\}/g, text);
