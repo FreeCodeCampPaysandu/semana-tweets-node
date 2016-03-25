@@ -5,6 +5,10 @@ var timerRefresh = null;
 
 var tiempoDeVisualizacion = 8000;
 var ocultarDespuesDe = tiempoDeVisualizacion + (2000);
+var tweet_ids = [];
+var tweet_texts = [];
+
+moment.locale('es');
 
 // Funcion que devuelve Verdadero aproximadamente una de cada X veces, X como parametro
 function unoDeCada (num) {
@@ -54,7 +58,17 @@ function createCell (image) {
   return element.replace(/\{size\}/g, size);
 }
 
-function createColorboxDiv (id, user, text, hashTags, image) {
+function createColorboxDiv (tweet, image) {
+  var tweetSocialInfo = [
+    '<div class="col-xs-6 socialCol">',
+      '<span class="retweetCount"><i class="fa fa-retweet"></i> {retweets}</span>',
+      '<span class="likeCount"><i class="fa fa-heart"></i> {likes}</span>',
+    '</div>'
+  ].join('');
+
+  tweetSocialInfo = tweetSocialInfo.replace(/\{retweets\}/g, tweet.retweet_count);
+  tweetSocialInfo = tweetSocialInfo.replace(/\{likes\}/g, tweet.favorite_count);
+
   var colorboxHtml = [
     '<div class="modal fade unseenTweet" id="{id}">',
       '<div class="vertical-alignment-helper">',
@@ -67,8 +81,11 @@ function createColorboxDiv (id, user, text, hashTags, image) {
                 '</div>',
                 '<div class="col-xs-6">',
                   '<h1>{user}</h1>',
+                  '<span class="userScreenName">{userScreenName}</span>',
+                  '<span class="tweetCreadoHace">{created}</span>',
                   '<h3>{text}</h3>',
                 '</div>',
+                tweetSocialInfo,
               '</div>',
             '</div>',
           '</div>',
@@ -76,22 +93,47 @@ function createColorboxDiv (id, user, text, hashTags, image) {
       '</div>',
     '</div>'
   ].join('');
+
+  var created = moment(tweet.created_at).fromNow();
   
   colorboxHtml = colorboxHtml.replace(/\{url\}/g, image);
-  colorboxHtml = colorboxHtml.replace(/\{text\}/g, text);
-  colorboxHtml = colorboxHtml.replace(/\{id\}/g, id);
-  colorboxHtml = colorboxHtml.replace(/\{user\}/g, user);
-
+  colorboxHtml = colorboxHtml.replace(/\{text\}/g, tweet.text);
+  colorboxHtml = colorboxHtml.replace(/\{id\}/g, tweet.id);
+  colorboxHtml = colorboxHtml.replace(/\{userScreenName\}/g, '@' + tweet.user.screen_name);
+  colorboxHtml = colorboxHtml.replace(/\{user\}/g, tweet.user.name);
+  colorboxHtml = colorboxHtml.replace(/\{created\}/g, created);
 
   return colorboxHtml;
+}
+
+function addTweet (wall, tweet, colocarAlInicio) {
+  if ($.inArray(tweet.text, tweet_texts) == -1 && $.inArray(tweet.id, tweet_ids) == -1) {
+    var tweetUserImage = tweet.user.profile_image_url.replace('_normal', '');
+
+    //replace the avatar with the first media share
+    if (tweet.entities != undefined && tweet.entities.media != undefined) {
+      tweetUserImage = tweet.entities.media[0].media_url;
+    }
+
+    var element = createCell(tweetUserImage);
+    var colorBox = createColorboxDiv(tweet, tweetUserImage);
+
+    wall.prepend(element);
+
+    if (colocarAlInicio) {
+      $('.colorbox-container').prepend(colorBox);
+    } else {
+      $('.colorbox-container').append(colorBox);
+    }
+    
+    tweet_texts.push(tweet.text);
+    tweet_ids.push(tweet.id);
+  }
 }
 
 $(document).ready(function () {
   var cellSize = 80;
   var cellGutter = 5;
-  var tweet_ids = [];
-  var tweet_texts = [];
-
 
   if ($(window).width() > 1600) {
     cellSize = 120;
@@ -143,21 +185,7 @@ $(document).ready(function () {
   
   socket.on('initialTweets', function (tweets) {
     $.each(tweets, function (index, tweet) {
-      //if the tweet hasnt been added
-      if ($.inArray(tweet.text, tweet_texts) == -1 && $.inArray(tweet.id, tweet_ids) == -1) {
-        var tweetUserImage = tweet.user.profile_image_url.replace('_normal', '');
-
-        //replace the avatar with the first media share
-        if (tweet.entities != undefined && tweet.entities.media != undefined) {
-          tweetUserImage = tweet.entities.media[0].media_url;
-        }
-        var element = createCell(tweetUserImage);
-        wall.prepend(element);
-        $('.colorbox-container').append(createColorboxDiv(tweet.id, tweet.user.name, tweet.text, '', tweetUserImage));
-        //console.log(tweet);
-        tweet_texts.push(tweet.text);
-        tweet_ids.push(tweet.id);
-      }
+      addTweet(wall, tweet, false);
     })
   });
   
@@ -201,23 +229,7 @@ $(document).ready(function () {
   });
 
   socket.on('tweet', function (tweet) {
-    console.log(tweet);
-    if ($.inArray(tweet.text, tweet_texts) == -1 && $.inArray(tweet.id, tweet_ids) == -1) {
-      var tweetUserImage = tweet.user.profile_image_url.replace('_normal', '');
-
-      //replace the avatar with the first media share
-      if (tweet.entities != undefined && tweet.entities.media != undefined) {
-        tweetUserImage = tweet.entities.media[0].media_url;
-      }
-      var element = createCell(tweetUserImage);
-      wall.prepend(element);
-      $('.colorbox-container').prepend(createColorboxDiv(tweet.id, tweet.user.name, tweet.text, '', tweetUserImage));
-      //console.log(tweet);
-      tweet_texts.push(tweet.text);
-      tweet_ids.push(tweet.id);
-      wall.prepend(element);
-    }
-    
+    addTweet(wall, tweet, true);
   })
 })
 
