@@ -37,11 +37,11 @@ body {
   background-size: contain;
   position: absolute;
   background-color: #ECECEC;
-  -webkit-filter: grayscale(100%);
+  /*-webkit-filter: grayscale(100%);*/
   -webkit-transition: .5s ease-in-out;
-  -moz-filter: grayscale(100%); 
+  /*-moz-filter: grayscale(100%); */
   -moz-transition: .5s ease-in-out;
-  -o-filter: grayscale(100%); 
+  /*-o-filter: grayscale(100%); */
   -o-transition: .5s ease-in-out;
 }
 
@@ -194,4 +194,30 @@ body {
     width:inherit;
     height:inherit;
     margin: 0 auto;
+}
+
+/*
+  Estilos caja tweet
+*/
+
+.retweetCount, .likeCount, .tweetCreadoHace, .userScreenName {
+  font-size: 1.3em;
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.userScreenName {
+  color: #8899a6;
+}
+
+.tweetCreadoHace {
+  color: #F05B15;
+}
+
+.retweetCount {
+  color: #19cf86;
+}
+
+.likeCount {
+  color: #e81c4f;
 }

@@ -24,7 +24,8 @@ gulp.task('compile-vendor-js', function() {
     'bower_components/jquery/dist/jquery.min.js',
     'public/js/freewall.js',
     'bower_components/bootstrap/dist/js/bootstrap.min.js',
-    'bower_components/underscore/underscore-min.js'
+    'bower_components/underscore/underscore-min.js',
+    'bower_components/moment/min/moment-with-locales.min.js'
   ], {base: 'bower_components'})
   .pipe(concat("vendor.js"))
   .pipe(gulp.dest('public/js'))
