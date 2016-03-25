@@ -11,12 +11,9 @@ function unoDeCada (num) {
   return (Math.floor((Math.random() * num) + 1)) === num;
 }
 
-var unseenTweet;
 var idTweetMostrar;
 
-function showTweet() {
-  unseenTweets = [];
-  
+function showTweet() {  
   if ($('.unseenTweet').length === 0) {
     $('.modal:not(".unseenTweet")').map(function(index, elem) {
       $(elem).addClass('unseenTweet');
@@ -25,13 +22,7 @@ function showTweet() {
     console.log("Volvio a setear la clase unseenTweet");
   }
   
-  $('.unseenTweet').map(function(index, elem) {
-    unseenTweets.push($(elem).attr('id'));
-  });
-  
-  console.log(unseenTweets);
-  
-  idTweetMostrar = unseenTweets[0];
+  idTweetMostrar = $('.unseenTweet').first().attr('id');
   $('#' + idTweetMostrar).modal('toggle');
   $('#' + idTweetMostrar).removeClass('unseenTweet');
   

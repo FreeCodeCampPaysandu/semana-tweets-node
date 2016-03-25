@@ -82,7 +82,8 @@ app.get('/initial', function (req, res) {
 
 io.on('connection', function (socket) {
   console.log('a user connected');
-  
+  var fechaActual = formatDate(new Date());
+
   T.get('search/tweets', { q: 'from:@Semana_Cerveza since:'+ fechaActual, count: 200 }, function (err, data, response) {
 
     io.emit('initialTweets', data.statuses);
