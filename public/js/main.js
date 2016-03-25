@@ -27,13 +27,19 @@ function showTweet() {
   }
   
   idTweetMostrar = $('.unseenTweet').first().attr('id');
-  $('#' + idTweetMostrar).modal('toggle');
-  $('#' + idTweetMostrar).removeClass('unseenTweet');
+
+  var divMostrar = $('#' + idTweetMostrar);
+  var dataCreatedAt = divMostrar.find('.tweetCreadoHace').data('created_at');
+  var creadoHace = moment(dataCreatedAt).fromNow();
+
+  divMostrar.find('.tweetCreadoHace').text(creadoHace);
+  divMostrar.modal('toggle');
+  divMostrar.removeClass('unseenTweet');
   
   clearTimeout(timerHide);
   clearTimeout(timerShow);
   
-  timerHide = _.delay(function() {$('#' + idTweetMostrar).modal('hide'); }, tiempoDeVisualizacion);
+  timerHide = _.delay(function() {divMostrar.modal('hide'); }, tiempoDeVisualizacion);
   timerShow = _.delay(showTweet, ocultarDespuesDe);
 }
 
@@ -82,7 +88,7 @@ function createColorboxDiv (tweet, image) {
                 '<div class="col-xs-6">',
                   '<h1>{user}</h1>',
                   '<span class="userScreenName">{userScreenName}</span>',
-                  '<span class="tweetCreadoHace">{created}</span>',
+                  '<span data-created_at="{created_at}" class="tweetCreadoHace"></span>',
                   '<h3>{text}</h3>',
                 '</div>',
                 tweetSocialInfo,
@@ -93,15 +99,13 @@ function createColorboxDiv (tweet, image) {
       '</div>',
     '</div>'
   ].join('');
-
-  var created = moment(tweet.created_at).fromNow();
   
   colorboxHtml = colorboxHtml.replace(/\{url\}/g, image);
   colorboxHtml = colorboxHtml.replace(/\{text\}/g, tweet.text);
   colorboxHtml = colorboxHtml.replace(/\{id\}/g, tweet.id);
   colorboxHtml = colorboxHtml.replace(/\{userScreenName\}/g, '@' + tweet.user.screen_name);
   colorboxHtml = colorboxHtml.replace(/\{user\}/g, tweet.user.name);
-  colorboxHtml = colorboxHtml.replace(/\{created\}/g, created);
+  colorboxHtml = colorboxHtml.replace(/\{created_at\}/g, tweet.created_at);
 
   return colorboxHtml;
 }
