@@ -3,25 +3,34 @@ var timerHide = null;
 var timerShow = null;
 var timerRefresh = null;
 
+var tiempoDeVisualizacion = 8000;
+var ocultarDespuesDe = tiempoDeVisualizacion + (2000);
+
 // Funcion que devuelve Verdadero aproximadamente una de cada X veces, X como parametro
 function unoDeCada (num) {
   return (Math.floor((Math.random() * num) + 1)) === num;
 }
 
-function showTweet(tweets, id) {
-  var index = Math.floor((Math.random() * tweets.length) + 1);
-  
+var idTweetMostrar;
 
-  if (id == null) {
-    $('#' + tweets[index]).modal('toggle');  
-  } else {
-    $('#' + id).modal('toggle');
+function showTweet() {  
+  if ($('.unseenTweet').length === 0) {
+    $('.modal:not(".unseenTweet")').map(function(index, elem) {
+      $(elem).addClass('unseenTweet');
+    });
+    
+    console.log("Volvio a setear la clase unseenTweet");
   }
+  
+  idTweetMostrar = $('.unseenTweet').first().attr('id');
+  $('#' + idTweetMostrar).modal('toggle');
+  $('#' + idTweetMostrar).removeClass('unseenTweet');
+  
   clearTimeout(timerHide);
   clearTimeout(timerShow);
-
-  timerHide = _.delay(function() {$('.modal').modal('hide'); }, 10000);
-  timerShow = _.delay(showTweet, 20000, tweets, null);
+  
+  timerHide = _.delay(function() {$('#' + idTweetMostrar).modal('hide'); }, tiempoDeVisualizacion);
+  timerShow = _.delay(showTweet, ocultarDespuesDe);
 }
 
 function refresh(wall) {
@@ -46,7 +55,27 @@ function createCell (image) {
 }
 
 function createColorboxDiv (id, user, text, hashTags, image) {
-  var colorboxHtml = '<div class="modal fade" id="{id}"><div class="vertical-alignment-helper"><div class="modal-dialog modal-lg vertical-align-center"><div class="modal-content"><div class="modal-body"><div class="row"><div class="col-xs-6"><img src="{url}" class="img img-responsive"></div><div class="col-xs-6"><h1>{user}</h1><h3>{text}</h3></div></div></div></div></div></div></div>';
+  var colorboxHtml = [
+    '<div class="modal fade unseenTweet" id="{id}">',
+      '<div class="vertical-alignment-helper">',
+        '<div class="modal-dialog modal-lg vertical-align-center">',
+          '<div class="modal-content">',
+            '<div class="modal-body">',
+              '<div class="row">',
+                '<div class="col-xs-6">',
+                  '<img src="{url}" class="img img-responsive">',
+                '</div>',
+                '<div class="col-xs-6">',
+                  '<h1>{user}</h1>',
+                  '<h3>{text}</h3>',
+                '</div>',
+              '</div>',
+            '</div>',
+          '</div>',
+        '</div>',
+      '</div>',
+    '</div>'
+  ].join('');
   
   colorboxHtml = colorboxHtml.replace(/\{url\}/g, image);
   colorboxHtml = colorboxHtml.replace(/\{text\}/g, text);
@@ -103,7 +132,7 @@ $(document).ready(function () {
     }
   });
 
-  timerShow = _.delay(showTweet, 5000, tweet_ids, null);
+  timerShow = _.delay(showTweet, 5000);
   timerRefresh = _.delay(refresh, 10000, wall);
 
 
@@ -182,14 +211,11 @@ $(document).ready(function () {
       }
       var element = createCell(tweetUserImage);
       wall.prepend(element);
-      $('.colorbox-container').append(createColorboxDiv(tweet.id, tweet.user.name, tweet.text, '', tweetUserImage));
+      $('.colorbox-container').prepend(createColorboxDiv(tweet.id, tweet.user.name, tweet.text, '', tweetUserImage));
       //console.log(tweet);
       tweet_texts.push(tweet.text);
       tweet_ids.push(tweet.id);
       wall.prepend(element);
-      wall.refresh();
-      $('.modal').modal('hide');
-      showTweet(tweet_ids, tweet.id);
     }
     
   })
