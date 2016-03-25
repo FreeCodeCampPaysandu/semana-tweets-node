@@ -136,6 +136,8 @@ stream.on('tweet', function (tweet) {
   io.emit('tweet', tweet);
 })
 
-http.listen(9000, function () {
+var port = process.env.NODE_ENV === 'production' ? 80 : 9000;
+
+http.listen(port, function () {
   console.log('listening on *:9000');
 })
