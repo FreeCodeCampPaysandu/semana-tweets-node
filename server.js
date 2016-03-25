@@ -14,10 +14,37 @@ var T = new Twit({
   timeout_ms: 60 * 1000  // optional HTTP request timeout to apply to all requests.
 });
 
+function formatDate(date) {
+  var d = new Date(date),
+      month = '' + (d.getMonth() + 1),
+      day = '' + d.getDate(),
+      year = d.getFullYear();
+
+  if (month.length < 2) month = '0' + month;
+  if (day.length < 2) day = '0' + day;
+
+  return [year, month, day].join('-');
+}
+
 app.use(express.static(path.join(__dirname, '/public')));
 
 app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname, '/index.html'));
+});
+
+app.get('/test', function (req, res) {
+  var fakeTweet = {
+    id: Date.now(),
+    text: "tweet de prueba ackac kac asc ksa ckas ckas csa " + Date.now(),
+    user: {
+      name: "UsuarioTest",
+      profile_image_url: "https://pbs.twimg.com/profile_images/623117485265522688/DEEYl1Rx_normal.png"
+    }
+  };
+
+  io.emit('tweet', fakeTweet);
+
+  res.json(fakeTweet);
 });
 
 app.get('/initial', function (req, res) {
@@ -55,7 +82,8 @@ app.get('/initial', function (req, res) {
 
 io.on('connection', function (socket) {
   console.log('a user connected');
-  T.get('search/tweets', { q: 'from:@Semana_Cerveza since:2016-03-19', count: 200 }, function (err, data, response) {
+  
+  T.get('search/tweets', { q: 'from:@Semana_Cerveza since:'+ fechaActual, count: 200 }, function (err, data, response) {
 
     io.emit('initialTweets', data.statuses);
     console.log('emited tweets');
